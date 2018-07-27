@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.hyt.myproject.common.dao.PartnersPrivilegeDao">
+    <!--auto generated Code-->
+    <resultMap id="BaseResultMap" type="com.hyt.myproject.common.dto.PartnersPrivilegeDto">
+        <result column="mpid" property="mpid"/>
+        <result column="role_id" property="roleId"/>
+        <result column="menu_id" property="menuId"/>
+        <association property="partnersRoleDto" column="ROLE_ID" javaType="com.hyt.myproject.common.dto.PartnersPrivilegeDto">
+            <id column="mrid" jdbcType="INTEGER" property="mrid" />
+            <result column="partner_user_id" jdbcType="INTEGER" property="partnerUserId" />
+            <result column="role_name" jdbcType="VARCHAR" property="roleName" />
+        </association>
+        <association property="partnersMenusDto" column="MENU_ID" javaType="com.hyt.myproject.common.dto.PartnersMenusDto">
+            <id column="MMID" jdbcType="INTEGER" property="mmid" />
+            <result column="parent_mid" jdbcType="INTEGER" property="parentMid" />
+            <result column="menu_type" jdbcType="INTEGER" property="menuType" />
+            <result column="menu_code" jdbcType="VARCHAR" property="menuCode" />
+            <result column="menu_name" jdbcType="VARCHAR" property="menuName" />
+            <result column="menu_url" jdbcType="VARCHAR" property="menuUrl" />
+            <result column="router_uri" jdbcType="VARCHAR" property="routerUri" />
+            <result column="display_order" jdbcType="INTEGER" property="displayOrder" />
+            <result column="status" jdbcType="INTEGER" property="status" />
+            <result column="is_log" jdbcType="INTEGER" property="isLog" />
+            <result column="menu_name_en" jdbcType="VARCHAR" property="menuNameEn" />
+            <result column="menu_icon" jdbcType="VARCHAR" property="menuIcon" />
+            <result column="permission" jdbcType="VARCHAR" property="permission" />
+        </association>
+    </resultMap>
+
+    <!--auto generated Code-->
+    <sql id="all_column">
+        `mpid`,
+        `role_id`,
+        `menu_id`
+    </sql>
+    
+    <select id="getPartnersPrivilegeByRoleId" parameterType="com.hyt.myproject.common.dto.PartnersPrivilegeDto" resultMap="BaseResultMap">
+        select p.*, m.* from wp_partners_privilege p, wp_partners_role u, wp_partners_menus m
+        where p.ROLE_ID = u.MRID and p.MENU_ID = m.MMID and m.STATUS = 1 and p.ROLE_ID = #{roleId}
+        and locate("PTYPE_PARTNER", m.PERMISSION) > 0
+        </select>
+</mapper>
+

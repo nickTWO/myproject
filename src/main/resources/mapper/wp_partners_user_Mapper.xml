@@ -1,0 +1,137 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.hyt.myproject.common.dao.PuserDao">
+    <!--auto generated Code-->
+    <resultMap id="BaseResultMap" type="com.hyt.myproject.common.dto.PartnersUserDto">
+        <result column="puid" jdbcType="BIGINT" property="puid"/>
+        <result column="top_puser_id" jdbcType="BIGINT" property="topPuserId"/>
+        <result column="role_id" jdbcType="BIGINT" property="roleId"/>
+        <result column="partner_type" jdbcType="VARCHAR" property="partnerType"/>
+        <result column="partner_id" jdbcType="VARCHAR" property="partnerId"/>
+        <result column="partner_name" jdbcType="VARCHAR" property="partnerName"/>
+        <result column="email" jdbcType="VARCHAR" property="email"/>
+        <result column="username" jdbcType="VARCHAR" property="username"/>
+        <result column="areacode" jdbcType="VARCHAR" property="areacode"/>
+        <result column="mobile" jdbcType="VARCHAR" property="mobile"/>
+        <result column="loginpwd" jdbcType="VARCHAR" property="loginpwd"/>
+        <result column="tradepwd" jdbcType="VARCHAR" property="tradepwd"/>
+        <result column="lastlogin" jdbcType="TIMESTAMP" property="lastlogin"/>
+        <result column="login_fail_num" jdbcType="INTEGER" property="loginFailNum"/>
+        <result column="lastip" jdbcType="VARCHAR" property="lastip"/>
+        <result column="salts" jdbcType="VARCHAR" property="salts"/>
+        <result column="create_time" jdbcType="TIMESTAMP" property="createTime"/>
+        <result column="ga_secret" jdbcType="VARCHAR"  property="gaSecret"/>
+        <result column="login_white_ip" jdbcType="VARCHAR"  property="loginWhiteIp"/>
+        <result column="status" jdbcType="INTEGER" property="status"/>
+        <result column="reset_login_pwd_time" jdbcType="TIMESTAMP" property="resetLoginPwdTime"/>
+        <result column="reset_trade_pwd_time" jdbcType="TIMESTAMP" property="resetTradePwdTime"/>
+    </resultMap>
+
+    <!--auto generated Code-->
+    <sql id="Base_Column_List">
+        `puid`,
+        `top_puser_id`,
+        `role_id`,
+        `partner_type`,
+        `partner_id`,
+        `partner_name`,
+        `email`,
+        `username`,
+        `areacode`,
+        `mobile`,
+        `loginpwd`,
+        `tradepwd`,
+         lastlogin,
+        `login_fail_num`,
+        `lastip`,
+        `salts`,
+        `create_time`,
+        `ga_secret`,
+        `login_white_ip`,
+        `status`,
+        `reset_login_pwd_time`,
+        `reset_trade_pwd_time`
+    </sql>
+
+    <select id="getPuserInfoByEmail" parameterType="com.hyt.myproject.common.dto.PartnersUserDto" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List" />
+        from wp_partners_user
+        <where>
+            <if test="email != null and email != ''">and EMAIL = #{email} </if>
+            <if test="partnerId != null and partnerId != ''">and PARTNER_ID = #{partnerId}</if>
+        </where>
+    </select>
+
+    <select id="getPartnerUserInfo" parameterType="com.hyt.myproject.common.dto.PartnersUserDto" resultMap="BaseResultMap">
+        SELECT
+        <include refid="Base_Column_List" />
+        FROM wp_partners_user
+        <trim prefix="WHERE" prefixOverrides="AND | OR">
+            <if test="puid != null"> and PUID = #{puid}</if>
+            <if test="email != null and email != ''"> and EMAIL = #{email}</if>
+            <if test="partnerId != null and partnerId != ''"> and PARTNER_ID = #{partnerId}</if>
+            <if test="topPuserId != null"> and TOP_PUSER_ID = #{topPuserId}</if>
+        </trim>
+    </select>
+
+    <update id="updatePartnerUserByPuid" parameterType="com.hyt.myproject.common.dto.PartnersUserDto">
+        update wp_partners_user
+        <set>
+            <if test="topPuserId != null ">                        TOP_PUSER_ID = #{topPuserId,jdbcType=INTEGER},     </if>
+            <if test="roleId != null">                             ROLE_ID = #{roleId,jdbcType=INTEGER},              </if>
+            <if test="partnerType != null and partnerType != ''">  PARTNER_TYPE = #{partnerType,jdbcType=VARCHAR},    </if>
+            <if test="partnerId != null and partnerId != ''">      PARTNER_ID = #{partnerId,jdbcType=VARCHAR},        </if>
+            <if test="partnerName != null and partnerName != ''">  PARTNER_NAME = #{partnerName,jdbcType=VARCHAR},    </if>
+            <if test="email != null and email != ''">              EMAIL = #{email,jdbcType=VARCHAR},                 </if>
+            <if test="username != null and username != ''">        USERNAME = #{username,jdbcType=VARCHAR},           </if>
+            <if test="areacode != null and areacode != ''">        AREACODE = #{areacode,jdbcType=VARCHAR},           </if>
+            <if test="mobile != null and mobile != ''">            MOBILE = #{mobile,jdbcType=VARCHAR},               </if>
+            <if test="loginpwd != null and loginpwd != ''">        LOGINPWD = #{loginpwd,jdbcType=VARCHAR},           </if>
+            <if test="tradepwd != null and tradepwd != ''">        TRADEPWD = #{tradepwd,jdbcType=VARCHAR},           </if>
+            <if test="lastlogin != null">    LASTLOGIN = #{lastlogin,jdbcType=TIMESTAMP},       </if>
+            <if test="loginFailNum != null"> LOGIN_FAIL_NUM = #{loginFailNum,jdbcType=INTEGER}, </if>
+            <if test="lastip != null and lastip != '' and lastip != '#reset#'">       LASTIP = #{lastip,jdbcType=VARCHAR},               </if>
+
+            <!-- 清除登陆IP -->
+            <if test="lastip != null and lastip == '#reset#'">       LASTIP = NULL ,               </if>
+
+            <if test="salts != null and salts != ''">         SALTS = #{salts,jdbcType=VARCHAR},                 </if>
+            <if test="createTime != null">   CREATE_TIME = #{createTime,jdbcType=TIMESTAMP},    </if>
+            <if test="gaSecret != null and gaSecret != ''">   GA_SECRET = #{gaSecret,jdbcType=VARCHAR},          </if>
+            <if test="status != null or status == 0">         STATUS = #{status,jdbcType=INTEGER},               </if>
+            <if test="loginWhiteIp != null">         LOGIN_WHITE_IP = #{loginWhiteIp},               </if>
+            <if test="resetLoginPwdTime != null">         RESET_LOGIN_PWD_TIME = #{resetLoginPwdTime},               </if>
+            <if test="resetTradePwdTime != null">         RESET_TRADE_PWD_TIME = #{resetTradePwdTime},               </if>
+        </set>
+        where PUID = #{puid,jdbcType=INTEGER}
+    </update>
+
+
+    <sql id="Base_Column_Page">
+        `puid` AS puid,
+        `top_puser_id` AS topPuserId,
+        `role_id` AS roleId,
+        `partner_type` AS partnerType,
+        `partner_id` AS partnerId,
+        `partner_name` AS partnerName,
+        `email` AS email,
+        `username` AS username,
+        `areacode` AS areacode,
+        `mobile` AS mobile,
+        `loginpwd` AS loginpwd,
+        `tradepwd` AS tradepwd,
+         lastlogin as lastlogin,
+        `login_fail_num` AS loginFailNum,
+        `lastip` AS lastip,
+        `salts` AS salts,
+        `create_time` AS createTime,
+        `ga_secret` AS gaSecret,
+        `login_white_ip` AS loginWhiteIp,
+        `status` AS status,
+        `reset_login_pwd_time` AS resetLoginPwdTime,
+        `reset_trade_pwd_time` AS resetTradePwdTime
+    </sql>
+
+</mapper>
+

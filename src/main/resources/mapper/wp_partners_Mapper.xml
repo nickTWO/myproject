@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.hyt.myproject.common.dao.PartnerDao" >
+    <resultMap id="BaseResultMap" type="com.hyt.myproject.common.dto.PartnerDto" >
+        <id column="PTID" jdbcType="INTEGER" property="ptid" />
+        <result column="PARTNER_TYPE" jdbcType="VARCHAR" property="partnerType" />
+        <result column="OPERATE_PARTNER_ID" jdbcType="VARCHAR" property="operatePartnerId" />
+        <result column="TOP_PARTNER_ID" jdbcType="VARCHAR" property="topPartnerId" />
+        <result column="PARTNER_LEVEL" jdbcType="INTEGER" property="partnerLevel" />
+        <result column="PARTNER_ID" jdbcType="VARCHAR" property="partnerId" />
+        <result column="PARTNER_NAME" jdbcType="VARCHAR" property="partnerName" />
+        <result column="PARTNER_NAME_ALIAS" jdbcType="VARCHAR" property="partnerNameAlias" />
+        <result column="TRADE_NOTIFY_URL" jdbcType="VARCHAR" property="tradeNotifyUrl" />
+        <result column="TRANSFER_NOTIFY_URL" jdbcType="VARCHAR" property="transferNotifyUrl" />
+        <result column="PARTNER_MD5_KEY" jdbcType="VARCHAR" property="partnerMd5Key" />
+        <result column="PARTNER_AES_KEY" jdbcType="VARCHAR" property="partnerAesKey" />
+        <result column="SINGLE_DAY_LIMIT" jdbcType="INTEGER" property="singleDayLimit" />
+        <result column="SINGLE_DAY_QUOTA" jdbcType="DECIMAL" property="singleDayQuota" />
+        <result column="TRADE_DAILY_TOTAL" jdbcType="INTEGER" property="tradeDailyTotal" />
+        <result column="TRADE_DAILY_QUOTA" jdbcType="DECIMAL" property="tradeDailyQuota" />
+        <result column="TRADE_DAILY_DATE" jdbcType="VARCHAR" property="tradeDailyDate" />
+        <result column="CREATE_TIME" jdbcType="TIMESTAMP" property="createTime" />
+        <result column="UPDATE_TIME" jdbcType="TIMESTAMP" property="updateTime" />
+        <result column="API_STATUS" jdbcType="INTEGER" property="apiStatus" />
+        <result column="APP_DOMAIN" jdbcType="VARCHAR" property="appDomain" />
+        <result column="APP_SKIN" jdbcType="VARCHAR" property="appSkin" />
+        <result column="STATUS" jdbcType="INTEGER" property="status" />
+        <result column="IS_TEMPLATE" jdbcType="INTEGER" property="isTemplate" />
+        <result column="IS_KYC" jdbcType="INTEGER" property="isKyc" />
+
+    </resultMap>
+    <resultMap extends="BaseResultMap" id="ResultMapWithBLOBs" type="com.hyt.myproject.common.dto.PartnerDto">
+        <result column="PARTNER_INFO" jdbcType="LONGVARCHAR" property="partnerInfo" />
+        <result column="PAYCLOUD_PRIVATE_KEY" jdbcType="LONGVARCHAR" property="paycloudPrivateKey" />
+        <result column="PAYCLOUD_PUBLIC_KEY" jdbcType="LONGVARCHAR" property="paycloudPublicKey" />
+        <result column="PARTNER_PUBLIC_KEY" jdbcType="LONGVARCHAR" property="partnerPublicKey" />
+        <result column="API_DOMAIN_LIST" jdbcType="LONGVARCHAR" property="apiDomainList" />
+        <result column="API_WHITE_IP" jdbcType="LONGVARCHAR" property="apiWhiteIp" />
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        PTID, PARTNER_TYPE AS partnerType, OPERATE_PARTNER_ID AS operatePartnerId, TOP_PARTNER_ID AS topPartnerId,
+        PARTNER_LEVEL AS partnerLevel, PARTNER_ID AS partnerId,PARTNER_NAME AS partnerName, PARTNER_NAME_ALIAS AS partnerNameAlias,
+        ifnull(TRADE_NOTIFY_URL, '') AS tradeNotifyUrl, ifnull(TRANSFER_NOTIFY_URL, '') AS transferNotifyUrl, PARTNER_MD5_KEY AS partnerMd5Key,PARTNER_AES_KEY AS partnerAesKey,
+        SINGLE_DAY_LIMIT AS singleDayLimit, SINGLE_DAY_QUOTA AS singleDayQuota, TRADE_DAILY_TOTAL AS tradeDailyTotal, TRADE_DAILY_QUOTA AS tradeDailyQuota,
+        TRADE_DAILY_DATE AS tradeDailyDate, CREATE_TIME AS createTime, UPDATE_TIME AS updateTime, API_STATUS AS apiStatus, APP_DOMAIN AS appDomain,
+        APP_SKIN AS appSkin, STATUS,IS_TEMPLATE AS isTemplate,QPAY_DOMAIN AS qpayDomain, IS_KYC AS isKyc
+    </sql>
+    <sql id="Blob_Column_List">
+        PARTNER_INFO AS partnerInfo, PAYCLOUD_PRIVATE_KEY AS paycloudPrivateKey, PAYCLOUD_PUBLIC_KEY AS paycloudPublicKey,
+        PARTNER_PUBLIC_KEY AS partnerPublicKey, API_DOMAIN_LIST AS apiDomainList,ifnull(API_WHITE_IP, '') AS apiWhiteIp
+    </sql>
+
+
+    <select id="getPartnerInfo" parameterType="com.hyt.myproject.common.dto.PartnerDto" resultType="com.hyt.myproject.common.dto.PartnerDto">
+        SELECT
+        <include refid="Base_Column_List"/>
+        ,
+        <include refid="Blob_Column_List" />
+        FROM wp_partners wp
+        <trim prefix="WHERE" prefixOverrides="AND | OR">
+            <if test="partnerId != null and partnerId != ''"> and wp.PARTNER_ID = #{partnerId}</if>
+            <if test="appDomain != null and appDomain != ''"> and wp.APP_DOMAIN=#{appDomain}</if>
+            <if test="ptid != null ">                         and wp.PTID=#{ptid}</if>
+            <if test="status != null or status == 0">         and wp.STATUS=#{status}</if>
+            <if test="topPartnerId != null and topPartnerId != ''">and wp.TOP_PARTNER_ID=#{topPartnerId}</if>
+            <if test="qpayDomain != null and qpayDomain != ''">and wp.QPAY_DOMAIN=#{qpayDomain}</if>
+        </trim>
+    </select>
+
+</mapper>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

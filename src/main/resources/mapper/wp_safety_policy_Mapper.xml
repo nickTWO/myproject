@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.hyt.myproject.common.dao.SafetyPolicyDao">
+  <resultMap id="BaseResultMap" type="com.hyt.myproject.common.dto.SafetyPolicyDto">
+    <id column="SPID" jdbcType="INTEGER" property="spid" />
+    <result column="PUID" jdbcType="INTEGER" property="puid" />
+    <result column="POLICY_MODULE" jdbcType="VARCHAR" property="policyModule" />
+    <result column="POLICY_VALUE" jdbcType="INTEGER" property="policyValue" />
+    <result column="DATELINE" jdbcType="TIMESTAMP" property="dateline" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    SPID, PUID, POLICY_MODULE, POLICY_VALUE, DATELINE
+  </sql>
+
+  <select id="getSafetyPolicyByPuidPmodule"  parameterType="com.hyt.myproject.common.dto.SafetyPolicyDto" resultMap="BaseResultMap">
+    SELECT
+    <include refid="Base_Column_List" />
+    from wp_safety_policy where PUID = #{puid} and POLICY_MODULE = #{policyModule}
+  </select>
+
+</mapper>

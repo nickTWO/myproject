@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.hyt.myproject.common.dao.PartnersMessageDao">
+  <resultMap id="BaseResultMap" type="com.hyt.myproject.common.dto.PartnersMessageDto">
+    <id column="MID" jdbcType="INTEGER" property="mid" />
+    <result column="MTYPE" jdbcType="VARCHAR" property="mtype" />
+    <result column="PUID" jdbcType="VARCHAR" property="puid" />
+    <result column="PARTNER_ID" jdbcType="VARCHAR" property="partnerId" />
+    <result column="VCODE" jdbcType="VARCHAR" property="vcode" />
+    <result column="AREACODE" jdbcType="VARCHAR" property="areacode" />
+    <result column="ACCOUNT" jdbcType="VARCHAR" property="account" />
+    <result column="RESULTS" jdbcType="VARCHAR" property="results" />
+    <result column="SENDTIME" jdbcType="TIMESTAMP" property="sendtime" />
+    <result column="ISUSED" jdbcType="INTEGER" property="isused" />
+    <result column="FINISHTIME" jdbcType="TIMESTAMP" property="finishtime" />
+    <result column="DATELINE" jdbcType="TIMESTAMP" property="dateline" />
+    <result column="IP" jdbcType="VARCHAR" property="ip" />
+    <result column="STATUS" jdbcType="INTEGER" property="status" />
+    <result column="CHANNEL_CODE" jdbcType="VARCHAR" property="channelCode" />
+    <result column="IS_TXI" jdbcType="INTEGER" property="isTxi" />
+  </resultMap>
+  <resultMap extends="BaseResultMap" id="ResultMapWithBLOBs" type="com.hyt.myproject.common.dto.PartnersMessageDto">
+    <result column="CONTENT" jdbcType="LONGVARCHAR" property="content" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    MID, MTYPE, PUID, VCODE, AREACODE, ACCOUNT, RESULTS, SENDTIME, ISUSED, FINISHTIME, 
+    DATELINE, IP, STATUS
+  </sql>
+  <sql id="Blob_Column_List">
+    CONTENT
+  </sql>
+
+
+  <select id="getPartnersMessageInfo" parameterType="com.hyt.myproject.common.dto.PartnersMessageDto" resultMap="ResultMapWithBLOBs">
+    select
+    <include refid="Base_Column_List" />
+    ,
+    <include refid="Blob_Column_List" />
+    from wp_partners_message
+    <trim prefix="WHERE" prefixOverrides="AND | OR">
+      <if test="puid != null and puid != ''">         and PUID  = #{puid}         </if>
+      <if test="mtype != null and mtype !=''">        and MTYPE = #{mtype}        </if>
+      <if test="areacode != null and areacode != ''"> and AREACODE = #{areacode}  </if>
+      <if test="account != null and account != ''">   and ACCOUNT = #{account}    </if>
+      <if test="isused != null ">                     and ISUSED = #{isused}      </if>
+      <if test="status != null or status == 0">       and STATUS = #{status}      </if>
+    </trim>
+    order by DATELINE DESC LIMIT 1
+  </select>
+
+
+  <update id="updatePartnerMessage" parameterType="com.hyt.myproject.common.dto.PartnersMessageDto">
+    update wp_partners_message
+    <trim prefix="SET" prefixOverrides=",">
+      <if test="results != null and results != ''"> , RESULTS = #{results}</if>
+      <if test="sendtime != null"> , SENDTIME = #{sendtime}</if>
+      <if test="status != null or status == 0"> , STATUS = #{status}</if>
+      <if test="content != null and content != ''"> , CONTENT = #{content}</if>
+
+      <if test="isused != null "> , ISUSED = #{isused}</if>
+      <if test="finishtime != null"> , FINISHTIME = #{finishtime}</if>
+    </trim>
+    where PUID = #{puid}
+    <if test="vcode != null and vcode !=''"> and VCODE = #{vcode} </if>
+    <if test="mid != null "> and MID = #{mid} </if>
+    <if test="mtype != null and mtype != ''"> and MTYPE = #{mtype} </if>
+  </update>
+
+
+</mapper>
