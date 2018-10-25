@@ -1,6 +1,7 @@
 package com.hyt.myproject.jwt;
 
 
+import com.hyt.myproject.common.dto.PcdToken;
 import com.hyt.myproject.exception.ApiException;
 
 /**
@@ -10,4 +11,6 @@ public interface JwtManager {
     String createJwtToken(String uid, String subject, String issuer, String secretKey);
 
     JwtToken verifyJwtToken(String secretKey, String token) throws ApiException;
+
+    String createJwtToken(PcdToken pcdToken);
 }

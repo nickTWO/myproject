@@ -25,6 +25,11 @@ spring:
 server:
   port: 8090
 
+swagger:
+  desc: 商户系统接口文档
+  enable: true
+  token.secret: 4606A998B443848FB88EF66931FE1BD2
+
 logs:
   path: ./logs
   level: debug

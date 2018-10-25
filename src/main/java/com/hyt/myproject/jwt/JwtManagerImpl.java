@@ -3,6 +3,8 @@ package com.hyt.myproject.jwt;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 
+import com.google.common.base.Preconditions;
+import com.hyt.myproject.common.dto.PcdToken;
 import com.hyt.myproject.common.vo.ResponseFormat;
 import com.hyt.myproject.exception.ApiException;
 import io.jsonwebtoken.*;
@@ -22,8 +24,7 @@ public class JwtManagerImpl implements JwtManager {
     // 15min
     private static final Long expire = 900000L;
 
-    //测试
-//    private static final Long expire = 180000L;
+    private static final Long DEFAULT_EXPIRE = 43200000L;
 
     private static final Logger logger = LoggerFactory.getLogger(JwtManagerImpl.class);
 
@@ -75,5 +76,18 @@ public class JwtManagerImpl implements JwtManager {
             logger.error(logmsg, "token验证发生未知异常");
             throw new ApiException(ResponseFormat.HTTP_NOT_AUTHORIZATION, "身份认证失效，请重新登录");
         }
+    }
+
+    @Override
+    public String createJwtToken(PcdToken pcdToken) {
+        Preconditions.checkNotNull(pcdToken);
+        if (pcdToken.getExpiredTime() <= 0L) {
+            pcdToken.setExpiredTime(DEFAULT_EXPIRE);
+        }
+
+        Map<String, Object> header = new HashMap(2);
+        header.put("typ", "JWT");
+        header.put("alg", "HS512");
+        return Jwts.builder().setAudience(pcdToken.getUid()).setExpiration(new Date(pcdToken.getStartTime() + pcdToken.getExpiredTime())).setSubject(pcdToken.getSubject()).setIssuedAt(new Date(pcdToken.getStartTime())).setHeader(header).setIssuer(pcdToken.getIssuer()).signWith(SignatureAlgorithm.HS512, pcdToken.getSecretKey()).compact();
     }
 }
